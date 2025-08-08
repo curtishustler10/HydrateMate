@@ -2,13 +2,13 @@
   "name": "hydratemate",
   "version": "1.0.0",
   "description": "Sip smarter. Hydrate happier. - A lightweight hydration tracking SaaS platform",
-  "main": "server/index.js",
+  "main": "index.js",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
   "scripts": {
-    "start": "cd server && npm start",
+    "start": "node index.js",
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "server": "cd server && npm start",
     "server:dev": "cd server && npm run dev",
@@ -37,8 +37,11 @@
     "url": "https://github.com/curtishustler10/HydrateMate/issues"
   },
   "homepage": "https://github.com/curtishustler10/HydrateMate#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2"
-  },
-  "dependencies": {}
+  }
 }

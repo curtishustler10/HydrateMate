@@ -4,7 +4,9 @@
       "Bash(mkdir:*)",
       "Bash(rm:*)",
       "Bash(git remote add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(curl:*)",
+      "Bash(cp:*)"
     ],
     "deny": []
   }
