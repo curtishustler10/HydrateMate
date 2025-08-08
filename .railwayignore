@@ -1,6 +1,10 @@
-# Ignore client directory for backend-only deployment
+# Ignore client directory for backend-only deployment  
 client/
 client/**/*
+
+# Ignore server directory for root deployment
+server/
+server/**/*
 
 # Development files
 .env.local
