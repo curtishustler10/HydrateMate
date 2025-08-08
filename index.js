@@ -51,10 +51,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`   - http://0.0.0.0:${PORT}/health`);
   console.log('🔥 Ready for Railway traffic!');
   
-  // Keep server alive
-  setInterval(() => {
-    console.log(`💓 Server heartbeat - ${new Date().toISOString()}`);
-  }, 30000);
+  // Server ready for traffic
 });
 
 server.on('error', (err) => {
