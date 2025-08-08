@@ -6,7 +6,8 @@
       "Bash(git remote add:*)",
       "Bash(git add:*)",
       "Bash(curl:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(npm install)"
     ],
     "deny": []
   }
