@@ -4,6 +4,20 @@ const createTables = async () => {
   try {
     console.log('🚀 Starting database migration...');
     
+    // Check if DATABASE_URL is available
+    if (!process.env.DATABASE_URL) {
+      console.log('⚠️  DATABASE_URL not found. Skipping migration.');
+      console.log('This is normal for local development without a database.');
+      process.exit(0);
+    }
+    
+    console.log('🔗 Database URL found, proceeding with migration...');
+    
+    // Test database connectivity first
+    console.log('🔍 Testing database connection...');
+    await db.query('SELECT 1');
+    console.log('✅ Database connection successful!');
+    
     // Enable UUID extension
     await db.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
     

@@ -8,6 +8,7 @@ const userRoutes = require('./routes/users');
 const hydrationRoutes = require('./routes/hydration');
 const challengeRoutes = require('./routes/challenges');
 const db = require('./models/database');
+const startup = require('./scripts/startup');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -161,10 +162,22 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-// Start server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log('✅ HydrateMate API Server started successfully!');
-  console.log(`🌐 Server running on http://0.0.0.0:${PORT}`);
-  console.log(`🔗 Health check: http://0.0.0.0:${PORT}/health`);
-  console.log(`📡 API status: http://0.0.0.0:${PORT}/api/status`);
+// Start server with database initialization
+const startServer = async () => {
+  // Run startup checks and migrations
+  const { databaseReady, migrationComplete } = await startup();
+  
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log('✅ HydrateMate API Server started successfully!');
+    console.log(`🌐 Server running on http://0.0.0.0:${PORT}`);
+    console.log(`🔗 Health check: http://0.0.0.0:${PORT}/health`);
+    console.log(`📡 API status: http://0.0.0.0:${PORT}/api/status`);
+    console.log(`📦 Database: ${databaseReady ? 'Connected' : 'Not available'}`);
+    console.log(`🗃️ Migration: ${migrationComplete ? 'Complete' : 'Skipped/Failed'}`);
+  });
+};
+
+startServer().catch((error) => {
+  console.error('❌ Failed to start server:', error);
+  process.exit(1);
 });
