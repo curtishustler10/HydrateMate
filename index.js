@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-console.log('🚀 HYDRATEMATE ROOT SERVER STARTING - VERSION 2.0');
+console.log('🚀 HYDRATEMATE ROOT SERVER STARTING - VERSION 2.1');
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Port from env:', process.env.PORT);
 console.log('Port being used:', PORT);
@@ -41,7 +41,7 @@ app.get('/health', (req, res) => {
 });
 
 const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log('✅ HYDRATEMATE SERVER v2.0 STARTED SUCCESSFULLY');
+  console.log('✅ HYDRATEMATE SERVER v2.1 STARTED SUCCESSFULLY');
   console.log(`🌐 Server listening on 0.0.0.0:${PORT}`);
   console.log(`🔗 Test endpoints:`);
   console.log(`   - http://0.0.0.0:${PORT}/`);
