@@ -1,0 +1,21 @@
+# Ignore client directory for backend-only deployment
+client/
+client/**/*
+
+# Development files
+.env.local
+.env.development
+*.log
+npm-debug.log*
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+coverage/
+*.test.js
