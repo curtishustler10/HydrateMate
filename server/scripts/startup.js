@@ -53,20 +53,26 @@ const runMigrationIfNeeded = async () => {
 const startup = async () => {
   console.log('🌟 HydrateMate Server Starting Up...');
   
-  if (!process.env.DATABASE_URL) {
-    console.log('⚠️  No DATABASE_URL found, starting in development mode');
+  try {
+    if (!process.env.DATABASE_URL) {
+      console.log('⚠️  No DATABASE_URL found, starting in development mode');
+      return { databaseReady: false, migrationComplete: false };
+    }
+    
+    const databaseReady = await waitForDatabase();
+    if (!databaseReady) {
+      console.log('⚠️  Starting server without database');
+      return { databaseReady: false, migrationComplete: false };
+    }
+    
+    const migrationComplete = await runMigrationIfNeeded();
+    
+    return { databaseReady, migrationComplete };
+  } catch (error) {
+    console.error('🔥 Startup process failed:', error.message);
+    console.log('⚠️  Starting server in fallback mode');
     return { databaseReady: false, migrationComplete: false };
   }
-  
-  const databaseReady = await waitForDatabase();
-  if (!databaseReady) {
-    console.log('⚠️  Starting server without database');
-    return { databaseReady: false, migrationComplete: false };
-  }
-  
-  const migrationComplete = await runMigrationIfNeeded();
-  
-  return { databaseReady, migrationComplete };
 };
 
 module.exports = startup;

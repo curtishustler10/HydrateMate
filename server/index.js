@@ -73,6 +73,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// Basic health check (no database dependency)
+app.get('/ping', (req, res) => {
+  res.json({ 
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    server: 'running'
+  });
+});
+
 // Health check endpoint with database connectivity
 app.get('/health', async (req, res) => {
   try {
@@ -164,12 +173,22 @@ process.on('SIGINT', () => {
 
 // Start server with database initialization
 const startServer = async () => {
-  // Run startup checks and migrations
-  const { databaseReady, migrationComplete } = await startup();
+  let databaseReady = false;
+  let migrationComplete = false;
+  
+  try {
+    // Run startup checks and migrations
+    const result = await startup();
+    databaseReady = result.databaseReady;
+    migrationComplete = result.migrationComplete;
+  } catch (error) {
+    console.error('⚠️  Startup failed, continuing with basic server:', error.message);
+  }
   
   app.listen(PORT, '0.0.0.0', () => {
     console.log('✅ HydrateMate API Server started successfully!');
     console.log(`🌐 Server running on http://0.0.0.0:${PORT}`);
+    console.log(`🔗 Basic ping: http://0.0.0.0:${PORT}/ping`);
     console.log(`🔗 Health check: http://0.0.0.0:${PORT}/health`);
     console.log(`📡 API status: http://0.0.0.0:${PORT}/api/status`);
     console.log(`📦 Database: ${databaseReady ? 'Connected' : 'Not available'}`);
@@ -177,7 +196,15 @@ const startServer = async () => {
   });
 };
 
+// Always start the server, even if startup fails
 startServer().catch((error) => {
-  console.error('❌ Failed to start server:', error);
-  process.exit(1);
+  console.error('❌ Critical startup failure:', error.message);
+  console.log('🚀 Starting basic server as fallback...');
+  
+  // Fallback: start server without database
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log('⚠️  Fallback server started (no database)');
+    console.log(`🌐 Server running on http://0.0.0.0:${PORT}`);
+    console.log(`🔗 Basic ping: http://0.0.0.0:${PORT}/ping`);
+  });
 });
