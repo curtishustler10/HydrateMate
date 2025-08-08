@@ -2,10 +2,11 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-console.log('🚀 HYDRATEMATE ROOT SERVER STARTING');
+console.log('🚀 HYDRATEMATE ROOT SERVER STARTING - VERSION 2.0');
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Port from env:', process.env.PORT);
 console.log('Port being used:', PORT);
+console.log('Railway deployment fix applied');
 
 app.use(express.json());
 
@@ -40,22 +41,47 @@ app.get('/health', (req, res) => {
 });
 
 const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log('✅ HYDRATEMATE SERVER STARTED SUCCESSFULLY');
+  console.log('✅ HYDRATEMATE SERVER v2.0 STARTED SUCCESSFULLY');
   console.log(`🌐 Server listening on 0.0.0.0:${PORT}`);
   console.log(`🔗 Test endpoints:`);
   console.log(`   - http://0.0.0.0:${PORT}/`);
   console.log(`   - http://0.0.0.0:${PORT}/ping`);
   console.log(`   - http://0.0.0.0:${PORT}/health`);
+  console.log('🔥 Ready for Railway traffic!');
+  
+  // Keep server alive
+  setInterval(() => {
+    console.log(`💓 Server heartbeat - ${new Date().toISOString()}`);
+  }, 30000);
 });
 
 server.on('error', (err) => {
   console.error('Server error:', err);
 });
 
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+  console.log('📥 SIGTERM received, shutting down gracefully...');
+  server.close(() => {
+    console.log('👋 Server closed gracefully');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('📥 SIGINT received, shutting down gracefully...');
+  server.close(() => {
+    console.log('👋 Server closed gracefully');  
+    process.exit(0);
+  });
+});
+
 process.on('uncaughtException', (err) => {
-  console.error('Uncaught exception:', err);
+  console.error('💥 Uncaught exception:', err);
+  process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled rejection at:', promise, 'reason:', reason);
+  console.error('💥 Unhandled rejection at:', promise, 'reason:', reason);
+  process.exit(1);
 });
