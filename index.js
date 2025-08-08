@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -8,6 +9,7 @@ console.log('Port from env:', process.env.PORT);
 console.log('Port being used:', PORT);
 console.log('Railway deployment fix applied');
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
