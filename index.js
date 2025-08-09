@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 8888;
+const PORT = process.env.PORT || 3000;
 
 console.log('🚀 HYDRATEMATE ROOT SERVER STARTING - VERSION 2.1');
 console.log('Environment:', process.env.NODE_ENV);
