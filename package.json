@@ -9,10 +9,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "build": "npm run build -w client",
-    "dev": "concurrently \"npm run dev -w server\" \"npm start -w client\"",
-    "migrate": "npm run migrate -w server",
-    "test": "echo \"Add tests here\" && exit 0"
+    "build": "npm --prefix client run build"
   },
   "repository": {
     "type": "git",
