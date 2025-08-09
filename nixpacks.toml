@@ -1,0 +1,24 @@
+# Force a custom Node build with npm (not pnpm) and bundle CRA into server/public
+
+[phases.setup]
+# Use Node 20.x (stable LTS)
+nixPkgs = ["nodejs-20_x"]
+
+[phases.install]
+# Install client and server deps with npm (fallback to npm install if no lockfile)
+cmds = [
+  "npm ci --prefix client || npm install --prefix client",
+  "npm ci --omit=dev --prefix server || npm install --omit=dev --prefix server"
+]
+
+[phases.build]
+# Build CRA and copy to server/public
+cmds = [
+  "npm run build --prefix client",
+  "rm -rf server/public && mkdir -p server/public",
+  "cp -r client/build/* server/public/"
+]
+
+[start]
+# Start the Express server from repo root
+cmd = "node server/index.js"

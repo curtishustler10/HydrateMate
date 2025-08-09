@@ -1,0 +1,5 @@
+# Do NOT ignore the client; we bundle it on Railway
+# Keep this file if you previously had client ignored.
+# Example entries you might want to ignore instead:
+# node_modules
+# .git
