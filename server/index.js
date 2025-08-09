@@ -64,11 +64,11 @@ app.use('*', (req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, '0.0.0.0', () => {
+// Start server - let Railway handle the host binding
+app.listen(PORT, () => {
   console.log('✅ Minimal HydrateMate Server started successfully!');
-  console.log(`🌐 Server running on http://0.0.0.0:${PORT}`);
-  console.log(`🔗 Test: http://0.0.0.0:${PORT}/ping`);
+  console.log(`🌐 Server running on port ${PORT}`);
+  console.log('🔥 Ready for Railway traffic!');
 });
 
 // Error handling
