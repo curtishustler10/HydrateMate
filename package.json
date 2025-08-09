@@ -2,24 +2,17 @@
   "name": "hydratemate",
   "version": "1.0.0",
   "description": "Sip smarter. Hydrate happier. - A lightweight hydration tracking SaaS platform",
-  "main": "index.js",
+  "private": true,
+  "workspaces": ["client", "server"],
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=18"
   },
   "scripts": {
-    "start": "cd server && npm start",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
-    "server": "cd server && npm start",
-    "server:dev": "cd server && npm run dev",
-    "client": "cd client && npm start",
-    "client:dev": "cd client && npm start",
-    "build": "cd client && npm run build",
-    "build:server": "cd server && npm install --production",
-    "install-deps": "npm install && cd server && npm install && cd ../client && npm install",
-    "migrate": "cd server && npm run migrate",
-    "test": "echo \"Add tests here\" && exit 0",
-    "heroku-postbuild": "npm run build"
+    "start": "node server/index.js",
+    "build": "npm -w client run build",
+    "dev": "concurrently \"npm -w server run dev\" \"npm -w client start\"",
+    "migrate": "npm -w server run migrate",
+    "test": "echo \"Add tests here\" && exit 0"
   },
   "repository": {
     "type": "git",
@@ -40,8 +33,7 @@
     "url": "https://github.com/curtishustler10/HydrateMate/issues"
   },
   "homepage": "https://github.com/curtishustler10/HydrateMate#readme",
-  "devDependencies": {
+  "dependencies": {
     "concurrently": "^8.2.2"
-  },
-  "dependencies": {}
+  }
 }
