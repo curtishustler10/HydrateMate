@@ -21,13 +21,12 @@ app.get('/api/status', (_req, res) => {
   res.json({ api: 'HydrateMate API', version: 'full-stack', ts: new Date().toISOString() });
 });
 
-// ✅ SPA fallback AFTER API routes
-app.get('*', (req, res, next) => {
+// SPA fallback AFTER /api routes
+app.get('*', (req, res) => {
   const indexPath = path.join(buildPath, 'index.html');
   if (!fs.existsSync(indexPath)) {
-    // Helpful runtime log while we sort CI
-    console.error('index.html missing at:', indexPath);
-    return res.status(500).send('Frontend build not found. Did the build run?');
+    console.error('Frontend build not found at:', indexPath);
+    return res.status(500).send('Frontend build not found. Did the client build run?');
   }
   res.sendFile(indexPath);
 });
