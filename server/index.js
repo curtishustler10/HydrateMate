@@ -65,7 +65,20 @@ app.use('/api/*', (err, req, res, next) => {
 // Serve React App for all non-API routes (SPA routing)
 app.get('*', (req, res) => {
   const indexPath = path.join(buildPath, 'index.html');
-  console.log(`📄 Serving React app: ${indexPath}`);
+  console.log(`📄 Attempting to serve React app from: ${indexPath}`);
+  
+  // Check if build directory and index.html exist
+  const fs = require('fs');
+  if (!fs.existsSync(buildPath)) {
+    console.error(`❌ Build directory not found: ${buildPath}`);
+    return res.status(404).send('Build directory not found');
+  }
+  
+  if (!fs.existsSync(indexPath)) {
+    console.error(`❌ index.html not found: ${indexPath}`);
+    return res.status(404).send('index.html not found');
+  }
+  
   res.sendFile(indexPath);
 });
 
