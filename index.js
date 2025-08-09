@@ -42,13 +42,10 @@ app.get('/health', (req, res) => {
   });
 });
 
-const server = app.listen(PORT, '::', () => {
+const server = app.listen(PORT, () => {
   console.log('✅ HYDRATEMATE SERVER v2.1 STARTED SUCCESSFULLY');
-  console.log(`🌐 Server listening on :: (IPv6 dual stack):${PORT}`);
-  console.log(`🔗 Test endpoints:`);
-  console.log(`   - http://[::]:${PORT}/`);
-  console.log(`   - http://[::]:${PORT}/ping`);
-  console.log(`   - http://[::]:${PORT}/health`);
+  console.log(`🌐 Server listening on port ${PORT}`);
+  console.log(`🔗 Railway endpoints ready`);
   console.log('🔥 Ready for Railway traffic!');
   
   // Server ready for traffic
