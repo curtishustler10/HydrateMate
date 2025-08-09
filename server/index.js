@@ -16,8 +16,27 @@ app.use(express.json());
 
 // Serve static files from the React app build directory
 const buildPath = path.join(__dirname, '..', 'client', 'build');
-console.log(`📁 Serving static files from: ${buildPath}`);
-app.use(express.static(buildPath));
+console.log(`📁 Attempting to serve static files from: ${buildPath}`);
+console.log(`📂 Current working directory: ${process.cwd()}`);
+console.log(`📂 __dirname: ${__dirname}`);
+
+// Check if build directory exists
+const fs = require('fs');
+if (fs.existsSync(buildPath)) {
+  console.log(`✅ Build directory found at: ${buildPath}`);
+  app.use(express.static(buildPath));
+} else {
+  console.log(`❌ Build directory not found at: ${buildPath}`);
+  // Try alternative path (in case we're running from root)
+  const altBuildPath = path.join(process.cwd(), 'client', 'build');
+  console.log(`🔍 Trying alternative path: ${altBuildPath}`);
+  if (fs.existsSync(altBuildPath)) {
+    console.log(`✅ Build directory found at alternative path: ${altBuildPath}`);
+    app.use(express.static(altBuildPath));
+  } else {
+    console.log(`❌ Build directory not found at alternative path either`);
+  }
+}
 
 // API endpoints (all under /api prefix)
 app.get('/api', (req, res) => {
@@ -64,13 +83,20 @@ app.use('/api/*', (err, req, res, next) => {
 
 // Serve React App for all non-API routes (SPA routing)
 app.get('*', (req, res) => {
-  const indexPath = path.join(buildPath, 'index.html');
+  // Determine correct build path
+  let correctBuildPath = buildPath;
+  const altBuildPath = path.join(process.cwd(), 'client', 'build');
+  
+  if (!fs.existsSync(buildPath) && fs.existsSync(altBuildPath)) {
+    correctBuildPath = altBuildPath;
+  }
+  
+  const indexPath = path.join(correctBuildPath, 'index.html');
   console.log(`📄 Attempting to serve React app from: ${indexPath}`);
   
   // Check if build directory and index.html exist
-  const fs = require('fs');
-  if (!fs.existsSync(buildPath)) {
-    console.error(`❌ Build directory not found: ${buildPath}`);
+  if (!fs.existsSync(correctBuildPath)) {
+    console.error(`❌ Build directory not found: ${correctBuildPath}`);
     return res.status(404).send('Build directory not found');
   }
   
